@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastrar.css') }}">
+    <title>Cadastrar Paciente</title>
+</head>
+<body>
+
+<h1>Registrar Paciente</h1>
+<form onsubmit="event.preventDefault(); registerPatient();">
+
+    <label for="cpf">CPF:</label>
+    <input type="text" id="cpf" name="cpf" maxlength="11" pattern="\d{11}" title="Digite 11 números para o CPF" required><br><br>
+
+    <label for="name">Nome:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="condition">Condição:</label>
+    <input type="text" id="condition" name="condition" required><br><br>
+    
+    <label for="date">Data de Agendamento:</label>
+    <input type="text" id="date" name="date" pattern="\d{2}/\d{2}/\d{4}" title="Formato da data deve ser dd/mm/aaaa" required><br><br>
+
+    <label for="paid">Pago:</label>
+    <select id="paid" name="paid" required>
+        <option value="SIM">SIM</option>
+        <option value="NAO">NÃO</option>
+    </select><br><br>
+
+    <button type="submit">Registrar Ocorrência</button>
+
+</form>
+<script>
+    async function registerPatient() {
+        const cpf = document.getElementById('cpf').value;
+        const name = document.getElementById('name').value;
+        const condition = document.getElementById('condition').value;
+        const date = document.getElementById('date').value;
+        const paid = document.getElementById('paid').value;
+
+        // Validação adicional no lado do cliente
+        if (!/^\d{11}$/.test(cpf)) {
+            alert('CPF deve conter exatamente 11 números.');
+            return;
+        }
+
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+            alert('Data deve estar no formato dd/mm/aaaa.');
+            return;
+        }
+
+        const patient = {
+            cpf: cpf,
+            name: name,
+            condition: condition,
+            date: date,
+            paid: paid
+        };
+
+        const response = await fetch("{{ url_for('add_patient') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(patient)
+        });
+
+        if (response.ok) {
+            window.location.href = "{{ url_for('main.agendamento') }}";
+        } else {
+            alert('Erro ao registrar paciente.');
+        }
+    }
+</script>
+</body>
+</html>

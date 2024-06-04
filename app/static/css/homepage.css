@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url("/static/css/images/background.jpg") no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.welcome-message {
+    font-size: 3em;
+    text-shadow: 2px 2px 4px #000;
+}
+
+#btn-agendarConsulta {
+    display: block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.5em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#btn-agendarConsulta:hover {
+    background-color: #45a049;
+}

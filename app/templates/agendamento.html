@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/agendamento.css') }}">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        async function loadPatients() {
+            const response = await fetch('http://127.0.0.1:5000/get_patients');
+            const patients = await response.json();
+            console.log(patients);
+            const table = document.getElementById('patientsTable')
+            table.innerHTML = ''; // limpa a tabela
+
+            patients.forEach(patient => {
+                const row = table.insertRow();
+                const cpfCell = row.insertCell(0);
+                const nameCell = row.insertCell(1);
+                const conditionCell = row.insertCell(2);
+                const dateCell = row.insertCell(3);
+                const paidCell = row.insertCell(4);
+
+                cpfCell.innerText = patient.cpf;
+                nameCell.innerText = patient.name;
+                conditionCell.innerText = patient.condition;
+                dateCell.innerText = patient.date;
+                paidCell.innerText = patient.paid;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPatients);
+
+        function CadastrarPage() {
+            window.location.href = "{{ url_for('main.cadastrar') }}";
+        }
+    </script>
+
+    <h1>Agendamento de Pacientes</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Condição</th>
+                <th>Agendamento</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+
+        <tbody id="patientsTable"></tbody>
+    </table>
+
+    <button id="btn-cadastrarPaciente" onclick="CadastrarPage()">Cadastrar Paciente</button>
+</body>
+</html>
