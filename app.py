@@ -57,8 +57,6 @@ def delete_patient():
 def get_patients():
     return jsonify(patients)
 
-<<<<<<< HEAD
-=======
 @app.route('/add_patient', methods=['POST'])
 def add_patient():
     data = request.json
@@ -76,7 +74,6 @@ def add_patient():
     }
     patients.append(patient)
     return jsonify(patients)
->>>>>>> bbac7a51d5d5113fe2fb9d50c757f9c4f44af7fb
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
