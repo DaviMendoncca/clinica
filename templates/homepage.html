@@ -10,12 +10,22 @@
 <body>
     <h1 class="welcome-message">Bem Vindo à Clínica NAO</h1>
     <br>
+    <h3>Desenvolvimento Web</h3>
+    <h3>Davi Mendonca</h3> 
+    <h3>Lucas Pimentel</h3>
+    <h3>Pedro Guilherme</h3>
+    <h3>Eduardo Vinicius</h3>
+
     <br>
     <script>
         function FazerAgendamento() {
             window.location.href = "{{ url_for('main.agendamento') }}";
         }
+        function OpenPrototype() {
+            window.location.href = "{{ url_for('main.prototype') }}";
+        }
     </script>
     <button onclick="FazerAgendamento()" id="btn-agendarConsulta">Agendar consulta</button>
+    <button onclick="OpenPrototype()" id="btn-openPrototype">Prototype Version</button>
 </body>
 </html>

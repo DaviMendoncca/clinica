@@ -14,6 +14,10 @@ def agendamento():
 def cadastrar():
     return render_template('cadastrar.html')
 
+@main.route('/prototype')
+def prototype():
+    return render_template('prototype.html')
+
 # Rota para listar todas as rotas (para debugging)
 @main.route('/routes')
 def list_routes():

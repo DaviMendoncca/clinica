@@ -36,20 +36,45 @@ table tr:hover {
     background-color: #f1f1f1;
 }
 
-#btn-cadastrarPaciente {
-    display: block;
-    width: 200px;
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     margin: 20px auto;
+}
+
+#btn-cadastrarPaciente, .btn-edit, .btn-delete {
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
-    font-size: 16px;
+}
+
+#btn-cadastrarPaciente {
+    background-color: #4CAF50;
+    color: white;
 }
 
 #btn-cadastrarPaciente:hover {
     background-color: #45a049;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
 }

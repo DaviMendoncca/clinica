@@ -10,12 +10,16 @@
 <body>
 
     <script>
-        async function loadPatients() {
+    async function loadPatients() {
+        try {
             const response = await fetch('http://127.0.0.1:5000/get_patients');
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
             const patients = await response.json();
             console.log(patients);
-            const table = document.getElementById('patientsTable')
-            table.innerHTML = ''; // limpa a tabela
+            const table = document.getElementById('patientsTable');
+            table.innerHTML = ''; // Clear the table
 
             patients.forEach(patient => {
                 const row = table.insertRow();
@@ -30,10 +34,82 @@
                 conditionCell.innerText = patient.condition;
                 dateCell.innerText = patient.date;
                 paidCell.innerText = patient.paid;
-            });
-        }
 
-        document.addEventListener('DOMContentLoaded', loadPatients);
+                const actionsCell = row.insertCell(5);
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'button-container';
+
+                const editButton = document.createElement('button');
+                editButton.innerText = 'Edit';
+                editButton.className = 'btn-edit';
+                editButton.onclick = () => editPatient(patient.cpf);
+                buttonContainer.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Delete';
+                deleteButton.className = 'btn-delete';
+                deleteButton.onclick = () => deletePatient(patient.cpf);
+                buttonContainer.appendChild(deleteButton);
+
+                actionsCell.appendChild(buttonContainer);
+            });
+        } catch (error) {
+            console.error('Failed to fetch patients:', error);
+        }
+    }
+
+    async function editPatient(cpf) {
+        const name = prompt("Enter new name:");
+        const condition = prompt("Enter new condition:");
+        const date = prompt("Enter new date (dd/mm/yyyy):");
+        const paid = prompt("Enter new paid status (SIM/NAO):");
+
+        const patient = { cpf };
+
+        if (name) patient.name = name;
+        if (condition) patient.condition = condition;
+        if (date) patient.date = date;
+        if (paid) patient.paid = paid;
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/edit_patient', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(patient)
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            loadPatients(); // Reload the patient list
+        } catch (error) {
+            console.error('Failed to edit patient:', error);
+        }
+    }
+
+    async function deletePatient(cpf) {
+        const confirmed = confirm("Are you sure you want to delete this patient?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/delete_patient', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cpf })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            loadPatients(); // Reload the patient list
+        } catch (error) {
+            console.error('Failed to delete patient:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPatients);
 
         function CadastrarPage() {
             window.location.href = "{{ url_for('main.cadastrar') }}";
@@ -55,6 +131,8 @@
         <tbody id="patientsTable"></tbody>
     </table>
 
-    <button id="btn-cadastrarPaciente" onclick="CadastrarPage()">Cadastrar Paciente</button>
+    <div class="button-container">
+        <button id="btn-cadastrarPaciente" onclick="CadastrarPage()">Cadastrar Paciente</button>
+    </div>
 </body>
 </html>
