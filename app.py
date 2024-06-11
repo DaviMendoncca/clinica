@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, render_template, url_for
+
+from flask import Flask, jsonify, render_template, request, url_for
 
 def create_app():
     app = Flask(__name__)
@@ -10,24 +11,19 @@ def create_app():
 
 app = create_app()
 
-
 patients = []
 
+@app.route('/')
+def home():
+    return render_template('homepage.html')
 
+@app.route('/agendamento')
+def agendamento():
+    return render_template('agendamento.html')
 
-
-@app.route('/add_patient', methods=['POST'])
-def add_patient():
-    data = request.json
-    patient = {
-        'cpf': data['cpf'],
-        'name': data['name'],
-        'condition': data['condition'],
-        'date': data['date'],
-        'paid': data['paid'],
-    }
-    patients.append(patient)
-    return jsonify(patients)
+@app.route('/cadastrar')
+def cadastrar():
+    return render_template('cadastrar.html')
 
 @app.route('/edit_patient', methods=['PUT'])
 def edit_patient():
@@ -61,8 +57,26 @@ def delete_patient():
 def get_patients():
     return jsonify(patients)
 
+<<<<<<< HEAD
+=======
+@app.route('/add_patient', methods=['POST'])
+def add_patient():
+    data = request.json
+    if data is None:
+        return jsonify({'error': 'No input data provided'}), 400
+    if not all(key in data for key in ('cpf', 'name', 'condition', 'date', 'paid')):
+        return jsonify({'error': 'Missing required data'}), 400
+
+    patient = {
+        'cpf': data['cpf'],
+        'name': data['name'],
+        'condition': data['condition'],
+        'date': data['date'],
+        'paid': data['paid']
+    }
+    patients.append(patient)
+    return jsonify(patients)
+>>>>>>> bbac7a51d5d5113fe2fb9d50c757f9c4f44af7fb
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-    
-
